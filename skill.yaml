@@ -1,6 +1,6 @@
 ---
 name: social_security_card_ocr
-version: 1.0.4
+version: 1.0.5
 description: 严格用于社会保障卡（社保卡、医保卡）图片识别。本技能仅在用户明确要求识别社保卡时由系统自动触发，不处理通用图片 OCR，不支持除社保卡以外的证件或文档类型。
 author: SCNet
 license: MIT
