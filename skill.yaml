@@ -19,11 +19,26 @@ dependencies:
   - requests
 permissions:
   files:
-    - read: "读取用户提供的本地社保卡图片文件，用于上传至 SCNet OCR 服务。仅应读取用户通过 filePath 参数显式指定的图片路径。"
+    read:
+      reason: "读取用户通过 filePath 参数显式提供的本地社保卡图片文件，用于上传至 SCNet OCR 服务。"
+      restrictions:
+        - "仅读取 filePath 参数指定的单个文件。"
+        - "禁止读取用户主目录以外的文件或敏感系统文件。"
+        - "仅接受图片/PDF 文件，拒绝可执行文件、脚本或压缩包。"
   network:
-    - outbound: "向 SCNet 第三方 OCR 服务 api.scnet.cn 上传图片并获取识别结果。除该 API 基础地址外，不应访问其他网络端点。"
+    outbound:
+      reason: "仅向 SCNet 第三方 OCR 服务上传图片并获取识别结果。"
+      endpoints:
+        - "https://api.scnet.cn/api/llm/v1/ocr/recognize"
+      restrictions:
+        - "仅允许访问 SCNET_API_BASE 配置的 API 基础地址。"
+        - "禁止访问其他外部网络端点或代理转发。"
   shell:
-    - execute: "执行本技能脚本 scripts/main.py 以运行 Python 程序完成识别任务。仅应执行本技能自身脚本，不执行任意用户命令。"
+    execute:
+      reason: "执行本技能脚本 scripts/main.py 以运行 Python 程序完成识别任务。"
+      restrictions:
+        - "仅执行本技能自身脚本。"
+        - "禁止执行任意用户提供的命令或解释器指令。"
 capabilities:
   ocr:
     - SOCIAL_SECURITY_CARD
